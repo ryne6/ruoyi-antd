@@ -30,6 +30,7 @@ declare module 'vue' {
     ASwitch: typeof import('ant-design-vue/es')['Switch']
     ATable: typeof import('ant-design-vue/es')['Table']
     BaseCard: typeof import('./src/components/atom/BaseCard/index.vue')['default']
+    ColumnSetting: typeof import('./src/components/common/pageTable/ColumnSetting.vue')['default']
     Form: typeof import('./src/components/atom/Form/components/form.vue')['default']
     Layout: typeof import('./src/components/layout/index.vue')['default']
     MenuItem: typeof import('./src/components/layout/components/MenuItem.vue')['default']

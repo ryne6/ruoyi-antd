@@ -1,9 +1,11 @@
 <script setup lang="ts" name="pageTable">
-import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined, SettingOutlined, SyncOutlined } from '@ant-design/icons-vue'
-import { h } from 'vue'
+import ColumnSetting from './ColumnSetting.vue'
+import { DeleteOutlined, EditOutlined, ExportOutlined, ImportOutlined, PlusOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons-vue'
+import { h, ref } from 'vue'
 import type { AntdIconProps } from '@ant-design/icons-vue/lib/components/AntdIcon'
 import type { FunctionalComponent } from 'vue'
-import type { ButtonProps, TableColumnType } from 'ant-design-vue'
+import type { ButtonProps } from 'ant-design-vue'
+import type { ColumnType } from './types'
 
 interface HeaderActionItem {
   title: string
@@ -13,7 +15,7 @@ interface HeaderActionItem {
 }
 
 interface Props {
-  columns: TableColumnType[]
+  columns: ColumnType[]
   dataSource: any[]
   headerActions: HeaderActionItem[]
   autoIcon?: boolean
@@ -33,6 +35,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(['update:showSearch'])
 
+const displayColumns = ref(props.columns)
+
+function handleColumnsUpdate(newColumns: any) {
+  displayColumns.value = newColumns
+}
+
 const defaultIconMap = {
   新增: PlusOutlined,
   删除: DeleteOutlined,
@@ -40,6 +48,7 @@ const defaultIconMap = {
   导入: ImportOutlined,
   导出: ExportOutlined,
 }
+
 function getIcon(action: HeaderActionItem) {
   if (action.icon) {
     return h(action.icon)
@@ -55,7 +64,7 @@ function getIcon(action: HeaderActionItem) {
 <template>
   <div class="page-table__header flex mb-2 justify-between">
     <a-space>
-      <a-button v-for="(action, i) of headerActions" :key="i" :icon="getIcon(action)" v-bind="action.attrs">
+      <a-button v-for="(action, i) of headerActions" :key="i" :icon="getIcon(action)" v-bind="action.attrs" @click="action.callback">
         {{ action.title }}
       </a-button>
     </a-space>
@@ -63,8 +72,8 @@ function getIcon(action: HeaderActionItem) {
     <a-space>
       <a-button :icon="h(SearchOutlined)" @click="emit('update:showSearch', !showSearch)" />
       <a-button :icon="h(SyncOutlined)" @click="onSearch" />
-      <a-button :icon="h(SettingOutlined)" />
+      <ColumnSetting :columns="columns" @update:columns="handleColumnsUpdate" />
     </a-space>
   </div>
-  <a-table class="page-table" :columns="columns" :data-source="dataSource" @change="onSearch" />
+  <a-table class="page-table" :columns="displayColumns" :data-source="dataSource" @change="onSearch" />
 </template>
