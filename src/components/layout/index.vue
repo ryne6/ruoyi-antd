@@ -71,16 +71,6 @@ useMultipleKeydownEvent(document, ['Meta', 'k'], () => {
 
 const { changeScreenfull, isScreenfull } = useScreenFull()
 
-async function handleLocal() {
-  const lang = unref(i18n.global.locale)
-  if (lang === 'zh-CN') {
-    await loadLocaleMessages('en-US')
-  }
-  else {
-    await loadLocaleMessages('zh-CN')
-  }
-}
-
 const router = useRouter()
 const { userInfo, roles, permissions } = storeToRefs(useUserStore())
 function logout() {
@@ -90,6 +80,19 @@ function logout() {
   roles.value = []
   permissions.value = []
   message.success('已退出登录！')
+}
+
+const { state: systemState } = storeToRefs(useSystemStore())
+async function handleLocal() {
+  const lang = unref(i18n.global.locale)
+  if (lang === 'zh-CN') {
+    systemState.value.locale = 'en-US'
+    await loadLocaleMessages('en-US')
+  }
+  else {
+    systemState.value.locale = 'zh-CN'
+    await loadLocaleMessages('zh-CN')
+  }
 }
 
 const isAppearanceTransition
@@ -110,7 +113,6 @@ function changeDark(event: MouseEvent) {
     Math.max(y, innerHeight - y),
   )
 
-  // @ts-expect-error: Transition API
   const transition = document.startViewTransition(() => {
     document.documentElement.className = state.value.dark ? 'light' : 'dark'
     state.value.dark = !state.value.dark
@@ -139,7 +141,7 @@ function changeDark(event: MouseEvent) {
 <template>
   <pageMenu />
   <div class="position-relative right-container flex h-100% flex-col">
-    <div class="h-50px flex items-center justify-between">
+    <div class="h-50px min-h-50px flex items-center justify-between">
       <div class="navbar-left ml-10px flex items-center">
         <span v-if="state.collapsed" class="i-line-md:menu-fold-right cursor-pointer" @click="state.collapsed = !state.collapsed" />
         <span v-else class="i-line-md:menu-fold-left cursor-pointer" @click="state.collapsed = !state.collapsed" />
@@ -180,7 +182,7 @@ function changeDark(event: MouseEvent) {
       </div>
     </div>
     <tagList v-show="state.showTagsView" />
-    <div class="main flex-1 bg-pure p-16px">
+    <main class="main bg-pure p-16px flex-1">
       <router-view v-slot="{ Component }">
         <keep-alive :include="includesTag">
           <Transition name="fade-transform" mode="out-in">
@@ -188,7 +190,7 @@ function changeDark(event: MouseEvent) {
           </Transition>
         </keep-alive>
       </router-view>
-    </div>
+    </main>
     <search v-model:visible="searchVisible" />
     <systemConfig />
     <a-button :icon="h(SettingOutlined)" type="primary" class="fixed right-0 top-30%" @click="state.showSystemDrawer = true" />

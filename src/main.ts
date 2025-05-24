@@ -1,6 +1,7 @@
 import App from './App.vue'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import AntD from 'ant-design-vue'
 import { router } from '@/router'
 import components from '@/components'
 import '@/utils/version-update'
@@ -14,4 +15,4 @@ import { setupI18n } from '@/locales'
 
 const pinia = createPinia()
 
-createApp(App).use(setupI18n).use(router).use(directives).use(components).use(pinia).mount('#app')
+createApp(App).use(AntD).use(setupI18n).use(router).use(directives).use(components).use(pinia).mount('#app')

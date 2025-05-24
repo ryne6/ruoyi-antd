@@ -7,7 +7,6 @@ export const useUserStore = defineStore('user', () => {
   const token = ref<string>()
   const roles = ref<string[]>([])
   const permissions = ref<string[]>([])
-
   return {
     userInfo,
     token,

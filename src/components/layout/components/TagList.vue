@@ -26,7 +26,7 @@ function handleClick(evt: MouseEvent, tag: Route) {
 </script>
 
 <template>
-  <div class="h-36px border-t-1px border-b-1px border-l-0 border-r-0 base-border-color border-solid flex items-center">
+  <div class="h-36px min-h-36px border-t-1px border-b-1px border-l-0 border-r-0 base-border-color border-solid flex items-center">
     <tag v-for="t of allTags" :key="t.name" :tag="t" @click.right="handleClick($event, t)" />
     <tagMenu ref="tagMenuRef" />
   </div>

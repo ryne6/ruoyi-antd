@@ -14,6 +14,7 @@ export const useSystemStore = defineStore('system', () => {
     currentRouteTitle: '首页',
     defaultTitle: 'ruoyi-antd',
     primaryColor: '#1677ff',
+    locale: 'zh-CN',
   })
 
   const route = useRoute()

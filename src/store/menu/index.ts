@@ -34,7 +34,7 @@ function dynamicImport(
     console.error('重复组件')
   }
   else {
-    console.error('找不到组件')
+    console.error(`找不到组件: ${component}`)
   }
 }
 
